@@ -1,0 +1,93 @@
+<!-- TAB 2: SOURCE MANAGER WITH MONITORING STRATEGY PREVIEW CARD -->
+<div id="sources-tab" class="tab-content">
+  
+  <div class="form-card">
+    <h3 id="form-title" style="margin-top: 0; color: var(--accent);">➕ Add New Source</h3>
+    <form id="source-form" onsubmit="handleDetectSource(event)">
+      <input type="hidden" id="edit-source-id">
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label>Source Title / Name</label>
+          <input type="text" id="source-name" class="form-control" placeholder="e.g. Federal Reserve Press Releases" required>
+        </div>
+        <div class="form-group">
+          <label>Website / Feed URL</label>
+          <input type="text" id="source-url" class="form-control" placeholder="e.g. https://www.federalreserve.gov/feeds/press_all.xml" required>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <label>Auto-Fetch Interval (Min : Sec)</label>
+          <div class="time-inputs">
+            <input type="number" id="source-min" class="form-control" placeholder="Min" min="0" value="5" required> :
+            <input type="number" id="source-sec" class="form-control" placeholder="Sec" min="0" max="59" value="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <select id="source-category" class="form-control" onchange="handleCategoryChange(this)">
+            <option value="">Loading categories...</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="custom-category-group" class="form-group" style="display: none;">
+        <label>New Custom Category Name</label>
+        <input type="text" id="custom-category-name" class="form-control" placeholder="e.g. Energy Markets">
+      </div>
+
+      <!-- STEP 1 BUTTON: DETECT & PREVIEW -->
+      <button type="submit" id="detect-btn" class="btn btn-primary" style="margin-top: 1rem;">
+        ✨ Detect & Preview Monitoring Plan
+      </button>
+    </form>
+
+    <!-- STEP 2 PREVIEW CARD CONTAINER -->
+    <div id="preview-card-container" style="display: none; margin-top: 1.5rem; background: var(--card); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--accent);">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 0.75rem;">
+        <h4 style="margin: 0; color: var(--accent);">🔍 Generated Monitoring Strategy Plan</h4>
+        <span id="preview-confidence-badge" class="badge-auto">100% CONFIDENCE</span>
+      </div>
+
+      <div style="margin-top: 1rem; font-size: 0.95rem;">
+        <p><strong>Strategy:</strong> <span id="preview-strategy-name">RSS Feed</span></p>
+        <p><strong>Reasoning:</strong> <span id="preview-reason">Official feed detected</span></p>
+        <p><strong>Recommended Polling:</strong> <span id="preview-polling">Every 5m 0s</span></p>
+        <p><strong>Capabilities Supported:</strong> <span id="preview-capabilities" style="color: #38bdf8;">Title, Published Date, URL, Summary</span></p>
+      </div>
+
+      <h5 style="color: var(--accent); margin-top: 1.25rem; margin-bottom: 0.5rem;">Preview of Top Extracted Items (First 5):</h5>
+      <div id="preview-items-list" style="background: var(--bg); padding: 1rem; border-radius: 6px; max-height: 200px; overflow-y: auto;">
+        <!-- Dynamically rendered preview items -->
+      </div>
+
+      <!-- STEP 3 CONFIRM SAVE BUTTON -->
+      <div style="display: flex; gap: 0.5rem; margin-top: 1.25rem;">
+        <button type="button" id="confirm-save-btn" class="btn btn-success" onclick="handleConfirmedSave()">
+          💾 Confirm & Save Source to Sentinel
+        </button>
+        <button type="button" class="btn" onclick="cancelPreview()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="color: var(--accent);">Monitored Sources</h3>
+  <table id="sources-table">
+    <thead>
+      <tr>
+        <th>Source Name & URL</th>
+        <th>Monitoring Strategy</th>
+        <th>Next Auto-Check (Countdown)</th>
+        <th>Status</th>
+        <th>Last Checked</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="sources-body">
+      <tr><td colspan="6">Loading sources...</td></tr>
+    </tbody>
+  </table>
+</div>
